@@ -18,8 +18,8 @@ const App = () => (
       </header>
       <p className="App-intro">
         Today is {today}
-        <Name />
       </p>
+      <Name />
     </div>
   </MuiThemeProvider>
 );

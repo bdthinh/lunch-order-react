@@ -1,32 +1,28 @@
 import React, { Component } from 'react';
-
-const nameInputStyles = {
-  border: '1px solid black',
-};
+import TextField from 'material-ui/TextField';
 
 class Name extends Component {
   constructor(props) {
     super(props);
     this.state = { text: '' };
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
 
-  handleOnChange(event) {
-    this.setState({ text: event.target.value });
+  handleOnChange(e) {
+    this.setState({ text: e.target.value });
+  }
+
+  handleOnSubmit(e) {
+    e.preventDefault();
+    console.log('name', this.state.text);
   }
 
   render() {
     return (
       <div>
-        <form action="">
-          <label htmlFor="username">Name </label>
-          <input
-            type="text"
-            id="username"
-            style={nameInputStyles}
-            value={this.state.text}
-            onChange={this.handleOnChange}
-          />
+        <form onSubmit={this.handleOnSubmit}>
+          <TextField hintText="Your name" value={this.state.text} onChange={this.handleOnChange} />
         </form>
       </div>
     );
