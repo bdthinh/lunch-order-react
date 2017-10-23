@@ -50,6 +50,7 @@ module.exports = {
     "react/no-unused-prop-types": 0,
     "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/anchor-has-content": 0,
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "no-console": 0
   }
 };
