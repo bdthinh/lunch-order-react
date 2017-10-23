@@ -5,6 +5,7 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 import logo from './logo.svg';
 import './App.css';
+import Name from './components/Name';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -17,6 +18,7 @@ const App = () => (
       </header>
       <p className="App-intro">
         Today is {today}
+        <Name />
       </p>
     </div>
   </MuiThemeProvider>
