@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import compose from 'recompose/compose';
 
 import Name from './components/Name';
 import Restaurants from './components/Restaurants';
@@ -7,58 +10,58 @@ import OrderButton from './components/OrderButton';
 
 import mockData from './components/mockData';
 
-class Layout extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { name: '', restaurants: [...mockData], current: '', chosenDishes: [] };
-    this.handleOnChangeName = this.handleOnChangeName.bind(this);
-    this.handleOnChangeRestaurant = this.handleOnChangeRestaurant.bind(this);
-    this.handleOnCheckDishes = this.handleOnCheckDishes.bind(this);
-  }
+const enhance = compose(
+  withState('name', 'setName', ''),
+  withState('restaurants', 'initRestaurants', [...mockData]),
+  withState('current', 'setRestaurant', ''),
+  withState('chosenDishes', 'chooseDishes', []),
+  withHandlers({
+    handleOnChangeName: ({ setName }) => e => setName(e.target.value),
+    handleOnChangeRestaurant: ({ setRestaurant }) => (e, value) => {
+      setRestaurant(mockData.find(restaurant => restaurant.name === value));
+      console.log('You are choosing ', value);
+    },
+    handleOnCheckDishes: ({ chooseDishes, chosenDishes }) => (currentDish, checked) => {
+      let newDishes = [];
+      if (checked) {
+        newDishes = [...chosenDishes, currentDish];
+      } else {
+        newDishes = chosenDishes.filter(dish => dish !== currentDish);
+      }
+      chooseDishes(newDishes);
+      console.log('Dishes', newDishes.join(', '));
+    },
+  }),
+);
 
-  handleOnChangeName(e) {
-    this.setState({ name: e.target.value });
-  }
-
-  handleOnChangeRestaurant(e, value) {
-    this.setState({ current: mockData.find(restaurant => restaurant.name === value) });
-    console.log('You are choosing ', value);
-  }
-
-  handleOnCheckDishes(currentDish, checked) {
-    let newDishes = [];
-    if (checked) {
-      newDishes = [...this.state.chosenDishes, currentDish];
-    } else {
-      newDishes = this.state.chosenDishes.filter(dish => dish !== currentDish);
+const Layout = ({
+  name,
+  restaurants,
+  current,
+  chosenDishes,
+  handleOnChangeName,
+  handleOnChangeRestaurant,
+  handleOnCheckDishes,
+}) => (
+  <div>
+    <Name
+      text={name}
+      onChange={handleOnChangeName}
+    />
+    <Restaurants
+      restaurants={restaurants}
+      onChange={handleOnChangeRestaurant}
+    />
+    {current && <Dishes
+      displayDishes={current.dishes}
+      chosenDishes={chosenDishes}
+      onCheck={handleOnCheckDishes}
+    />}
+    {
+      chosenDishes.length > 0 &&
+      <OrderButton name={name} dishes={chosenDishes} />
     }
-    this.setState({ chosenDishes: newDishes });
-    console.log('Dishes', newDishes.join(', '));
-  }
+  </div>
+);
 
-  render() {
-    return (
-      <div>
-        <Name
-          text={this.state.name}
-          onChange={this.handleOnChangeName}
-        />
-        <Restaurants
-          restaurants={this.state.restaurants}
-          onChange={this.handleOnChangeRestaurant}
-        />
-        {this.state.current && <Dishes
-          displayDishes={this.state.current.dishes}
-          chosenDishes={this.state.chosenDishes}
-          onCheck={this.handleOnCheckDishes}
-        />}
-        {
-          this.state.chosenDishes.length > 0 &&
-          <OrderButton name={this.state.name} dishes={this.state.chosenDishes} />
-        }
-      </div>
-    );
-  }
-}
-
-export default Layout;
+export default enhance(Layout);
