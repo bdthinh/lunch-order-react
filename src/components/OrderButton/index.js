@@ -8,7 +8,7 @@ class OrderButton extends Component {
   }
 
   handleOnClick() {
-    console.log('Order ', `${this.name}: ${this.restaurant}: ${this.dishes}`);
+    console.log('Order ', `${this.props.name}: ${this.props.dishes}`);
   }
 
   render() {
@@ -16,7 +16,7 @@ class OrderButton extends Component {
       <RaisedButton
         label="Order"
         primary
-        onClick={this.handleOnClick}
+        onTouchTap={this.handleOnClick}
       />
     );
   }

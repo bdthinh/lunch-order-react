@@ -4,13 +4,13 @@ import Checkbox from 'material-ui/Checkbox';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 import mockData from '../mockData';
-import OrderButton from '../OrderButton';
 
 class Restaurants extends Component {
   constructor(props) {
     super(props);
     this.state = { ...mockData, current: '', dishes: [] };
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnCheck = this.handleOnCheck.bind(this);
   }
 
   handleOnChange(e, value) {
@@ -18,9 +18,15 @@ class Restaurants extends Component {
     console.log('You are choosing ', value);
   }
 
-  handleOnCheck(e) {
-    console.log('Add dish', e.target.value);
-    this.setState({ dishes: [...this.state.dishes, e.target.value] });
+  handleOnCheck(currentDish, checked) {
+    let newDishes = [];
+    if (checked) {
+      newDishes = [...this.state.dishes, currentDish];
+    } else {
+      newDishes = this.state.dishes.filter(dish => dish !== currentDish);
+    }
+    this.setState({ dishes: newDishes });
+    console.log('Dishes', newDishes.join(', '));
   }
 
   render() {
@@ -43,11 +49,11 @@ class Restaurants extends Component {
             <Checkbox
               key={dish}
               label={dish}
-              onCheck={this.handleOnCheck}
+              checked={this.state.dishes.includes(dish)}
+              onCheck={(e, checked) => this.handleOnCheck(dish, checked)}
             />
           ))}
         </List>}
-        <OrderButton name={this.props} restaurant={this.state.current} dishes={this.state.dishes} />
       </div>
     );
   }
