@@ -1,22 +1,32 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import compose from 'recompose/compose';
 
 import Name from './components/Name';
+import { nameSelector, setName } from './components/Name/state';
 import Restaurants from './components/Restaurants';
 import Dishes from './components/Dishes';
 import OrderButton from './components/OrderButton';
 
 import mockData from './components/mockData';
 
+const connectNameWithRedux = connect(
+  state => ({
+    name: nameSelector(state),
+  }),
+  dispatch => ({
+    onChangeName: e => dispatch(setName(e.target.value)),
+  }),
+);
+
 const enhance = compose(
-  withState('name', 'setName', ''),
+  connectNameWithRedux,
   withState('restaurants', 'initRestaurants', [...mockData]),
   withState('current', 'setRestaurant', ''),
   withState('chosenDishes', 'chooseDishes', []),
   withHandlers({
-    handleOnChangeName: ({ setName }) => e => setName(e.target.value),
     handleOnChangeRestaurant: ({ setRestaurant }) => (e, value) => {
       setRestaurant(mockData.find(restaurant => restaurant.name === value));
       console.log('You are choosing ', value);
@@ -39,14 +49,14 @@ const Layout = ({
   restaurants,
   current,
   chosenDishes,
-  handleOnChangeName,
+  onChangeName,
   handleOnChangeRestaurant,
   handleOnCheckDishes,
 }) => (
   <div>
     <Name
       text={name}
-      onChange={handleOnChangeName}
+      onChange={onChangeName}
     />
     <Restaurants
       restaurants={restaurants}
