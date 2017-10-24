@@ -5,9 +5,7 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 import logo from './logo.svg';
 import './App.css';
-import Name from './components/Name';
-import Restaurants from './components/Restaurants';
-import OrderButton from './components/OrderButton';
+import Layout from './Layout';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -21,9 +19,7 @@ const App = () => (
       <p className="App-intro">
         Today is {today}
       </p>
-      <Name />
-      <Restaurants />
-      <OrderButton />
+      <Layout />
     </div>
   </MuiThemeProvider>
 );

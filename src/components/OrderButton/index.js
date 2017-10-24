@@ -16,7 +16,7 @@ class OrderButton extends Component {
       <RaisedButton
         label="Order"
         primary
-        onTouchTap={this.handleOnClick}
+        onClick={this.handleOnClick}
       />
     );
   }
