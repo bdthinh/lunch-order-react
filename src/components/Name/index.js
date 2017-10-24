@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TextField from 'material-ui/TextField';
 
-class Name extends Component {
-  render() {
-    return (
-      <TextField
-        id="name"
-        value={this.props.text}
-        onChange={this.props.onChange}
-      />
-    );
-  }
-}
+const Name = ({ text, onChange }) => (
+  <TextField
+    id="name"
+    value={text}
+    onChange={onChange}
+  />
+);
 
 export default Name;

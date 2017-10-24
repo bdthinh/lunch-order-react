@@ -1,25 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-class OrderButton extends Component {
-  constructor(props) {
-    super(props);
-    this.handleOnClick = this.handleOnClick.bind(this);
-  }
+import withHandlers from 'recompose/withHandlers';
 
-  handleOnClick() {
-    console.log('Order ', `${this.props.name}: ${this.props.dishes}`);
-  }
+const withOnClick = withHandlers({
+  onClick: ({ name, dishes }) => () => {
+    console.log('Order ', `${name}: ${dishes}`);
+  },
+});
 
-  render() {
-    return (
-      <RaisedButton
-        label="Order"
-        primary
-        onClick={this.handleOnClick}
-      />
-    );
-  }
-}
+const OrderButton = ({ onClick }) => (
+  <RaisedButton
+    label="Order"
+    primary
+    onClick={onClick}
+  />
+);
 
-export default OrderButton;
+export default withOnClick(OrderButton);
