@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 import mockData from '../mockData';
@@ -44,16 +43,6 @@ class Restaurants extends Component {
             ))}
           </RadioButtonGroup>
         </List>
-        {this.state.current && <List>
-          {this.state.current.dishes.map(dish => (
-            <Checkbox
-              key={dish}
-              label={dish}
-              checked={this.state.dishes.includes(dish)}
-              onCheck={(e, checked) => this.handleOnCheck(dish, checked)}
-            />
-          ))}
-        </List>}
       </div>
     );
   }

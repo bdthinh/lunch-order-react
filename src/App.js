@@ -8,6 +8,7 @@ import './App.css';
 import Name from './components/Name';
 import Restaurants from './components/Restaurants';
 import OrderButton from './components/OrderButton';
+import Dishes from './components/Dishes';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -23,6 +24,7 @@ const App = () => (
       </p>
       <Name />
       <Restaurants />
+      <Dishes />
       <OrderButton />
     </div>
   </MuiThemeProvider>
