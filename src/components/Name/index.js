@@ -1,5 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
+import { nameSelector, setName } from './state';
+
+const connectNameWithRedux = connect(
+  state => ({
+    name: nameSelector(state),
+  }),
+  dispatch => ({
+    onChange: e => dispatch(setName(e.target.value)),
+  }),
+);
 
 const Name = ({ text, onChange }) => (
   <TextField
@@ -9,4 +20,4 @@ const Name = ({ text, onChange }) => (
   />
 );
 
-export default Name;
+export default connectNameWithRedux(Name);

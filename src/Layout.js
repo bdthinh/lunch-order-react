@@ -5,32 +5,35 @@ import withState from 'recompose/withState';
 import compose from 'recompose/compose';
 
 import Name from './components/Name';
-import { nameSelector, setName } from './components/Name/state';
 import Restaurants from './components/Restaurants';
+import {
+  chooseRestaurant,
+  restaurantsSelector,
+  currentChosenRestaurantSelector,
+} from './components/Restaurants/state';
 import Dishes from './components/Dishes';
 import OrderButton from './components/OrderButton';
 
-import mockData from './components/mockData';
-
-const connectNameWithRedux = connect(
+const connectRestaurantWithRedux = connect(
   state => ({
-    name: nameSelector(state),
+    restaurants: restaurantsSelector(state),
+    current: currentChosenRestaurantSelector(state),
   }),
-  dispatch => ({
-    onChangeName: e => dispatch(setName(e.target.value)),
+  null,
+  ({ restaurants, ...otherStateProps }, { dispatch }, ownProps) => ({
+    ...ownProps,
+    ...otherStateProps,
+    restaurants,
+    handleOnChangeRestaurant: (e, value) => dispatch(chooseRestaurant(
+      restaurants.find(restaurant => restaurant.name === value),
+    )),
   }),
 );
 
 const enhance = compose(
-  connectNameWithRedux,
-  withState('restaurants', 'initRestaurants', [...mockData]),
-  withState('current', 'setRestaurant', ''),
+  connectRestaurantWithRedux,
   withState('chosenDishes', 'chooseDishes', []),
   withHandlers({
-    handleOnChangeRestaurant: ({ setRestaurant }) => (e, value) => {
-      setRestaurant(mockData.find(restaurant => restaurant.name === value));
-      console.log('You are choosing ', value);
-    },
     handleOnCheckDishes: ({ chooseDishes, chosenDishes }) => (currentDish, checked) => {
       let newDishes = [];
       if (checked) {
@@ -45,19 +48,14 @@ const enhance = compose(
 );
 
 const Layout = ({
-  name,
   restaurants,
   current,
   chosenDishes,
-  onChangeName,
   handleOnChangeRestaurant,
   handleOnCheckDishes,
 }) => (
   <div>
-    <Name
-      text={name}
-      onChange={onChangeName}
-    />
+    <Name />
     <Restaurants
       restaurants={restaurants}
       onChange={handleOnChangeRestaurant}
@@ -69,7 +67,7 @@ const Layout = ({
     />}
     {
       chosenDishes.length > 0 &&
-      <OrderButton name={name} dishes={chosenDishes} />
+      <OrderButton dishes={chosenDishes} />
     }
   </div>
 );
